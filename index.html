@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alkosto & Ktronix | Executive & Innovation Dashboard 2026</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js & Plugins -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              orange: '#FF6B00',
+              blue: '#004B93',
+              darkBlue: '#002C59',
+              accent: '#38BDF8',
+              surface: '#0F172A',
+              card: '#1E293B',
+              border: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #090D16;
+      color: #E2E8F0;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0F172A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    .kpi-gradient-1 {
+      background: radial-gradient(120% 120% at 0% 0%, rgba(255, 107, 0, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+    .kpi-gradient-2 {
+      background: radial-gradient(120% 120% at 0% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+    .kpi-gradient-3 {
+      background: radial-gradient(120% 120% at 0% 0%, rgba(34, 197, 94, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+    .kpi-gradient-4 {
+      background: radial-gradient(120% 120% at 0% 0%, rgba(168, 85, 247, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen antialiased flex flex-col selection:bg-brand-orange selection:text-white">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 glass-card border-b border-brand-border/60 bg-[#0c1220]/90">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <!-- Stylized Retail Logos Indicator -->
+          <div class="h-10 px-3 bg-gradient-to-r from-blue-700 to-brand-blue rounded-xl flex items-center justify-center font-black tracking-wider text-white shadow-lg shadow-blue-900/40 border border-blue-400/20">
+            <span>ALKOSTO</span>
+            <span class="text-brand-orange mx-1 text-lg">×</span>
+            <span>KTRONIX</span>
+          </div>
+        </div>
+        <div class="hidden md:block h-8 w-[1px] bg-slate-700/80"></div>
+        <div>
+          <h1 class="text-lg md:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            Panel de Desempeño & Innovación 
+            <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">2026 Audit</span>
+          </h1>
+          <p class="text-xs text-slate-400">Inteligencia Comercial y Estrategia Multicanal</p>
+        </div>
+      </div>
+
+      <!-- Global Controls / Filters -->
+      <div class="flex items-center gap-3">
+        <!-- Business Unit Selector -->
+        <div class="relative flex items-center">
+          <label for="companyFilter" class="sr-only">Filtrar por Empresa</label>
+          <div class="absolute left-3 pointer-events-none text-slate-400">
+            <i data-lucide="building-2" class="w-4 h-4 text-brand-orange"></i>
+          </div>
+          <select id="companyFilter" onchange="updateDashboardView()" 
+                  class="pl-9 pr-8 py-2 bg-slate-900/90 text-sm font-medium text-slate-200 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-orange focus:outline-none transition-all shadow-inner appearance-none cursor-pointer hover:border-slate-500">
+            <option value="ALL">Consolidado Total</option>
+            <option value="KTRONIX">Ktronix (Especialista)</option>
+            <option value="ALKOSTO">Alkosto (Hipermercado)</option>
+            <option value="INTERNET">Canal Online / E-commerce</option>
+          </select>
+          <div class="absolute right-3 pointer-events-none text-slate-400">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+        </div>
+
+        <!-- Export / Action Button -->
+        <button onclick="triggerPrintNotification()" class="hidden sm:flex items-center gap-2 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm rounded-xl border border-slate-600/60 shadow transition-all">
+          <i data-lucide="download" class="w-4 h-4 text-sky-400"></i>
+          <span>Reporte</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastMessage" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-800 border border-emerald-500/40 text-slate-200 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></div>
+    <span class="text-sm font-medium" id="toastText">Datos actualizados en tiempo real</span>
+  </div>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- KPI CARDS GRID -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      
+      <!-- Total Revenue KPI -->
+      <div class="glass-card kpi-gradient-1 p-5 rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px]">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Ventas Totales</p>
+            <h3 id="kpiRevenue" class="text-2xl md:text-3xl font-extrabold text-white mt-1 tracking-tight">$337.6B <span class="text-sm font-normal text-slate-400">COP</span></h3>
+          </div>
+          <div class="p-3 bg-brand-orange/15 rounded-xl border border-brand-orange/30 text-brand-orange">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-xs gap-2">
+          <span class="inline-flex items-center text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <i data-lucide="arrow-up-right" class="w-3 h-3 mr-0.5"></i> +14.2%
+          </span>
+          <span class="text-slate-400" id="kpiRevenueNote">Meta anual superada</span>
+        </div>
+      </div>
+
+      <!-- Gross Profit KPI -->
+      <div class="glass-card kpi-gradient-2 p-5 rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px]">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Utilidad Bruta</p>
+            <h3 id="kpiProfit" class="text-2xl md:text-3xl font-extrabold text-white mt-1 tracking-tight">$51.0B <span class="text-sm font-normal text-slate-400">COP</span></h3>
+          </div>
+          <div class="p-3 bg-sky-500/15 rounded-xl border border-sky-500/30 text-sky-400">
+            <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-xs gap-2">
+          <span class="inline-flex items-center text-sky-400 font-semibold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20">
+            Margen: <strong class="ml-1" id="kpiMargin">15.11%</strong>
+          </span>
+          <span class="text-slate-400">Rendimiento ponderado</span>
+        </div>
+      </div>
+
+      <!-- Volume KPI -->
+      <div class="glass-card kpi-gradient-3 p-5 rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px]">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Unidades Vendidas</p>
+            <h3 id="kpiUnits" class="text-2xl md:text-3xl font-extrabold text-white mt-1 tracking-tight">190.732</h3>
+          </div>
+          <div class="p-3 bg-emerald-500/15 rounded-xl border border-emerald-500/30 text-emerald-400">
+            <i data-lucide="boxes" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-xs gap-2">
+          <span class="inline-flex items-center text-slate-300 bg-slate-800 px-2 py-0.5 rounded-md border border-slate-700">
+            <strong id="kpiTransactions">136.908</strong> &nbsp;Tickets
+          </span>
+          <span class="text-slate-400">1.39 unid/transacción</span>
+        </div>
+      </div>
+
+      <!-- Average Ticket KPI -->
+      <div class="glass-card kpi-gradient-4 p-5 rounded-2xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-2px]">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Ticket Promedio</p>
+            <h3 id="kpiAvgTicket" class="text-2xl md:text-3xl font-extrabold text-white mt-1 tracking-tight">$2.47M <span class="text-sm font-normal text-slate-400">COP</span></h3>
+          </div>
+          <div class="p-3 bg-purple-500/15 rounded-xl border border-purple-500/30 text-purple-400">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-xs gap-2">
+          <span class="inline-flex items-center text-purple-400 font-semibold bg-purple-500/10 px-2 py-0.5 rounded-md border border-purple-500/20">
+            Omnicanal
+          </span>
+          <span class="text-slate-400">82.5% Retail Físico</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- MAIN CHARTS ROW 1 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Trend: Monthly Revenue & Profit Seasonality (2 cols) -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl lg:col-span-2 flex flex-col justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700/60 gap-3">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="line-chart" class="w-4 h-4 text-brand-orange"></i>
+              Estacionalidad Anual: Ventas vs. Utilidad Bruta 2026
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Impacto crítico de Aniversario Alkosto (Ago) y Temporada Navideña (Dic)</p>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-3 h-3 rounded bg-[#FF6B00]"></span> Ventas
+            </span>
+            <span class="flex items-center gap-1.5 text-slate-300 ml-2">
+              <span class="w-3 h-3 rounded bg-[#38BDF8]"></span> Utilidad
+            </span>
+          </div>
+        </div>
+        <div class="h-72 w-full pt-4">
+          <canvas id="monthlyTrendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Sales Share Doughnut (1 col) -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl flex flex-col justify-between">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-700/60">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-sky-400"></i>
+              Participación por Categoría
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Mix sobre el portafolio total</p>
+          </div>
+        </div>
+        <div class="h-64 relative flex items-center justify-center my-auto">
+          <canvas id="categoryShareChart"></canvas>
+        </div>
+        <div class="pt-2 text-[11px] text-center text-slate-400 border-t border-slate-800">
+          Computadores, TVs y Celulares dominan el <strong class="text-white">78.4%</strong> del valor.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAIN CHARTS ROW 2: INNOVATION & PAYMENT/CHANNELS -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Innovation Matrix: Revenue vs Margin % Bubble / Scatter representation -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl lg:col-span-7 flex flex-col justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700/60 gap-2">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+              Matriz Estratégica: Volumen de Venta vs. Rentabilidad (%)
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Detección de productos de alto margen (Accesorios/Audio) vs. tracción en ventas</p>
+          </div>
+          <span class="text-xs px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg self-start sm:self-auto font-medium">
+            Oportunidad de Cross-Selling
+          </span>
+        </div>
+        <div class="h-72 w-full pt-4">
+          <canvas id="marginEfficiencyChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Payment Methods & Channels (5 cols) -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl lg:col-span-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-700/60">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="credit-card" class="w-4 h-4 text-emerald-400"></i>
+              Mix de Medios de Pago
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Penetración financiera en las compras</p>
+          </div>
+          <span class="text-xs text-slate-400">Ventas en COP</span>
+        </div>
+        <div class="h-72 w-full pt-2">
+          <canvas id="paymentMethodsChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STRATEGIC INNOVATION PILLARS & INSIGHTS -->
+    <section class="glass-card p-6 rounded-2xl border-l-4 border-brand-orange">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="p-2.5 bg-gradient-to-br from-brand-orange to-red-600 rounded-xl text-white shadow-md">
+          <i data-lucide="lightbulb" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Insights Ejecutivos de Innovación Comercial 2026</h3>
+          <p class="text-xs text-slate-400">Hallazgos directos y palancas accionables derivadas del análisis del archivo de ventas</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        <!-- Insight 1 -->
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+          <div class="flex items-center gap-2 text-brand-orange text-xs font-bold uppercase tracking-wider mb-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            Accesorios: La Mina de Margen
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            Aunque <strong>Accesorios</strong> genera solo el 1.4% de la facturación ($4.734M COP), ostenta el margen récord de <strong class="text-emerald-400">39.1%</strong>. Implementar bundling automatizado en carritos online y zonas de checkout físico con Computadores (36% de ventas pero 13.4% margen) elevará el margen bruto consolidado en al menos 120 bps.
+          </p>
+        </div>
+
+        <!-- Insight 2 -->
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+          <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-wider mb-2">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            Crédito Propio & Omnicanalidad
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            El <strong>Crédito de Tienda ($68.4B)</strong> y tarjetas bancarias financian más del 60% de los tickets premium (MacBooks, iPhone 15, TVs OLED). El canal online representa el 17.5% de facturación con el margen más saludable (<strong>15.4%</strong> vs 15.0% Ktronix físico). Hay potencial para expandir "Buy Online, Pick Up in Store" (BOPIS) en ciudades secundarias.
+          </p>
+        </div>
+
+        <!-- Insight 3 -->
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
+          <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider mb-2">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            Fuerza Regional Fuera de Bogotá
+          </div>
+          <p class="text-xs leading-relaxed text-slate-300">
+            Bogotá ($56.1B) y Soacha ($28.6B) concentran la cabeza, pero <strong>Cali, Pereira, Villavicencio y Manizales</strong> generan en conjunto más de $68B COP. La demanda regional en Línea Blanca y Gaming muestra tasas de conversión más rápidas durante eventos de aniversario que la capital.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAILED DATA TABLES SECTION -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Category Performance Detailed Breakdown (7 cols) -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl lg:col-span-7 flex flex-col justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700/60 gap-2">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-brand-orange"></i>
+              Desempeño Financiero por Categoría
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Ventas, margen de contribución y volumen físico</p>
+          </div>
+          <div class="relative w-full sm:w-48">
+            <input type="text" id="catSearchInput" onkeyup="filterCategoriesTable()" placeholder="Buscar categoría..." 
+                   class="w-full bg-slate-900/80 border border-slate-700 text-xs text-white rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-brand-orange">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+          <table class="w-full text-left text-xs" id="categoryTable">
+            <thead class="text-slate-400 border-b border-slate-800 bg-slate-900/40 uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="py-3 px-3">Categoría</th>
+                <th class="py-3 px-3 text-right">Venta (COP)</th>
+                <th class="py-3 px-3 text-right">Part. %</th>
+                <th class="py-3 px-3 text-right">Margen %</th>
+                <th class="py-3 px-3 text-right">Unidades</th>
+                <th class="py-3 px-3 text-center">Estatus</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80 text-slate-200" id="catTableBody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Star Products (5 cols) -->
+      <div class="glass-card p-5 md:p-6 rounded-2xl lg:col-span-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-700/60">
+          <div>
+            <h4 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+              Top 5 Productos Estrella 2026
+            </h4>
+            <p class="text-xs text-slate-400 mt-0.5">Mayor facturación unitaria acumulada</p>
+          </div>
+          <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded-md border border-slate-700">Flagships</span>
+        </div>
+
+        <div class="space-y-3.5 mt-4" id="topProductsContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- REGIONAL FOOTPRINT SECTION -->
+    <section class="glass-card p-5 md:p-6 rounded-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700/60 gap-2">
+        <div>
+          <h4 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="map" class="w-4 h-4 text-emerald-400"></i>
+            Top Ciudades en Facturación Nacional
+          </h4>
+          <p class="text-xs text-slate-400 mt-0.5">Distribución geográfica de las ventas en el territorio colombiano</p>
+        </div>
+        <div class="text-xs text-slate-400 font-mono">Consolidado 8 Nodos Principales</div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mt-4 text-center" id="citiesGrid">
+        <!-- Rendered with JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-8 border-t border-slate-800/80 bg-[#070B12] py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Alkosto - Ktronix Data Engine v26.4.1 | Simulación Estratégica 2026</span>
+      </div>
+      <div>
+        <span>Datos confidenciales de gestión corporativa • Grupo Corbeta</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // RAW DATA MODEL BASED DIRECTLY ON EXCEL FILE
+    const rawData = {
+      global: {
+        totalRevenue: 337605697020,
+        grossProfit: 51027616020,
+        margin: 15.11,
+        units: 190732,
+        transactions: 136908,
+        ticketAvg: 2465931,
+      },
+      companies: {
+        ALL: {
+          name: "Consolidado Total",
+          revenue: 337605697020,
+          profit: 51027616020,
+          margin: 15.11,
+          units: 190732,
+          transactions: 136908,
+          trendMultiplier: 1.0
+        },
+        KTRONIX: {
+          name: "Ktronix",
+          revenue: 213254000000,
+          profit: 31988100000,
+          margin: 15.00,
+          units: 120109,
+          transactions: 86500,
+          trendMultiplier: 0.632
+        },
+        ALKOSTO: {
+          name: "Alkosto",
+          revenue: 65409000000,
+          profit: 10007577000,
+          margin: 15.30,
+          units: 37171,
+          transactions: 26800,
+          trendMultiplier: 0.194
+        },
+        INTERNET: {
+          name: "Canal Internet",
+          revenue: 58943000000,
+          profit: 9077222000,
+          margin: 15.40,
+          units: 33452,
+          transactions: 23608,
+          trendMultiplier: 0.175
+        }
+      },
+      monthlySeasonality: [
+        { month: 'Ene', sales: 17.7, profit: 2.67 },
+        { month: 'Feb', sales: 14.3, profit: 2.16 },
+        { month: 'Mar', sales: 19.1, profit: 2.89 },
+        { month: 'Abr (Cyber)', sales: 42.0, profit: 6.34 },
+        { month: 'May', sales: 16.2, profit: 2.45 },
+        { month: 'Jun', sales: 14.0, profit: 2.11 },
+        { month: 'Jul', sales: 16.9, profit: 2.55 },
+        { month: 'Ago (Aniv)', sales: 56.1, profit: 8.48 },
+        { month: 'Sep', sales: 15.7, profit: 2.37 },
+        { month: 'Oct', sales: 17.0, profit: 2.57 },
+        { month: 'Nov', sales: 6.5, profit: 0.98 },
+        { month: 'Dic (Nav)', sales: 102.1, profit: 15.43 }
+      ],
+      categories: [
+        { name: 'Computadores', sales: 121513, share: 36.0, margin: 13.4, units: 39772, color: '#38BDF8', tag: 'Core Volume' },
+        { name: 'Televisores', sales: 74625, share: 22.1, margin: 14.1, units: 27963, color: '#FF6B00', tag: 'High Ticket' },
+        { name: 'Celulares', sales: 68410, share: 20.3, margin: 15.5, units: 39090, color: '#10B981', tag: 'Fast Rotation' },
+        { name: 'Gaming', sales: 36313, share: 10.8, margin: 12.6, units: 18158, color: '#A855F7', tag: 'Niche Growth' },
+        { name: 'Audio', sales: 21420, share: 6.3, margin: 26.1, units: 30986, color: '#F59E0B', tag: 'High Margin' },
+        { name: 'Línea Blanca', sales: 10592, share: 3.1, margin: 15.1, units: 5964, color: '#EC4899', tag: 'Home Focus' },
+        { name: 'Accesorios', sales: 4734, share: 1.4, margin: 39.1, units: 28799, color: '#14B8A6', tag: 'Profit Maximizer' }
+      ],
+      payments: [
+        { method: 'PSE', amount: 73.3, pct: 21.7, color: '#004B93' },
+        { method: 'Crédito Tienda', amount: 68.4, pct: 20.3, color: '#FF6B00' },
+        { method: 'Tarjeta Débito', amount: 68.1, pct: 20.2, color: '#0EA5E9' },
+        { method: 'Tarjeta Crédito', amount: 66.9, pct: 19.8, color: '#8B5CF6' },
+        { method: 'Efectivo', amount: 60.9, pct: 18.0, color: '#10B981' }
+      ],
+      topProducts: [
+        { name: 'Apple MacBook Air M2 13.6"', category: 'Computadores', sales: 1271, units: 245, badge: '#1 Top Revenue' },
+        { name: 'Apple iPhone 15 128GB', category: 'Celulares', sales: 917, units: 218, badge: '#2 Flagship' },
+        { name: 'LG OLED 48" Serie C3 4K', category: 'Televisores', sales: 790, units: 182, badge: '#3 Premium TV' },
+        { name: 'Asus Vivobook 16 Core i7', category: 'Computadores', sales: 758, units: 236, badge: '#4 Workstation' },
+        { name: 'HP Pavilion 15 Ryzen 7', category: 'Computadores', sales: 637, units: 210, badge: '#5 Productivity' }
+      ],
+      cities: [
+        { name: 'Bogotá', amount: '56.1B', share: '33.2%' },
+        { name: 'Soacha', amount: '28.6B', share: '16.9%' },
+        { name: 'Cali', amount: '18.9B', share: '11.2%' },
+        { name: 'Pereira', amount: '17.2B', share: '10.2%' },
+        { name: 'Villavicencio', amount: '16.6B', share: '9.8%' },
+        { name: 'Manizales', amount: '15.7B', share: '9.3%' },
+        { name: 'Medellín', amount: '15.6B', share: '9.2%' },
+        { name: 'Yopal', amount: '15.6B', share: '9.2%' }
+      ]
+    };
+
+    // Chart.js Instances
+    let trendChartInstance = null;
+    let shareChartInstance = null;
+    let marginScatterInstance = null;
+    let paymentChartInstance = null;
+
+    // Formatting Helpers
+    function formatCurrencyBillions(amountInCOP) {
+      return '$' + (amountInCOP / 1000000000).toFixed(1) + 'B';
+    }
+
+    function formatNumber(num) {
+      return new Intl.NumberFormat('es-CO').format(num);
+    }
+
+    // INIT ALL CHARTS & TABLES
+    window.addEventListener('DOMContentLoaded', () => {
+      initMonthlyTrendChart('ALL');
+      initCategoryShareChart();
+      initMarginEfficiencyChart();
+      initPaymentMethodsChart();
+      renderCategoryTable(rawData.categories);
+      renderTopProducts();
+      renderCities();
+    });
+
+    // 1. MONTHLY TREND CHART (COMBINED BAR & LINE)
+    function initMonthlyTrendChart(companyKey) {
+      const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+      const multiplier = rawData.companies[companyKey].trendMultiplier;
+
+      const labels = rawData.monthlySeasonality.map(d => d.month);
+      const salesData = rawData.monthlySeasonality.map(d => Number((d.sales * multiplier).toFixed(1)));
+      const profitData = rawData.monthlySeasonality.map(d => Number((d.profit * multiplier).toFixed(1)));
+
+      if (trendChartInstance) {
+        trendChartInstance.destroy();
+      }
+
+      trendChartInstance = new Chart(ctx, {
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              type: 'line',
+              label: 'Utilidad Bruta (COP Billones)',
+              data: profitData,
+              borderColor: '#38BDF8',
+              backgroundColor: 'rgba(56, 189, 248, 0.15)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: '#38BDF8',
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              yAxisID: 'y1',
+              order: 1
+            },
+            {
+              type: 'bar',
+              label: 'Ventas Totales (COP Billones)',
+              data: salesData,
+              backgroundColor: (context) => {
+                const index = context.dataIndex;
+                // Highlight Special Events: Abr (index 3), Ago (index 7), Dic (index 11)
+                if (index === 11) return '#FF6B00'; // Dic
+                if (index === 7) return '#FF8833'; // Ago
+                if (index === 3) return '#FFA059'; // Abr
+                return 'rgba(255, 107, 0, 0.4)';
+              },
+              borderRadius: 6,
+              borderSkipped: false,
+              yAxisID: 'y',
+              order: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleColor: '#FFFFFF',
+              bodyColor: '#CBD5E1',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10,
+              boxPadding: 4,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: $${context.parsed.y}B COP`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.05)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94A3B8',
+                font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" }
+              }
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              grid: {
+                color: 'rgba(255, 255, 255, 0.05)',
+                drawBorder: false
+              },
+              ticks: {
+                color: '#94A3B8',
+                callback: (val) => '$' + val + 'B',
+                font: { size: 10 }
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              grid: {
+                drawOnChartArea: false,
+                drawBorder: false
+              },
+              ticks: {
+                color: '#38BDF8',
+                callback: (val) => '$' + val + 'B',
+                font: { size: 10 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 2. CATEGORY SHARE (DOUGHNUT)
+    function initCategoryShareChart() {
+      const ctx = document.getElementById('categoryShareChart').getContext('2d');
+      const labels = rawData.categories.map(c => c.name);
+      const data = rawData.categories.map(c => c.sales);
+      const colors = rawData.categories.map(c => c.color);
+
+      shareChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#0F172A',
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '72%',
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleColor: '#FFFFFF',
+              bodyColor: '#CBD5E1',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10,
+              callbacks: {
+                label: function(context) {
+                  const cat = rawData.categories[context.dataIndex];
+                  return [
+                    ` Venta: $${cat.sales.toLocaleString('es-CO')}M COP (${cat.share}%)`,
+                    ` Margen de Ganancia: ${cat.margin}%`,
+                    ` Volumen: ${cat.units.toLocaleString('es-CO')} unidades`
+                  ];
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 3. MARGIN EFFICIENCY MATRIX (BUBBLE / STRATEGIC SCATTER)
+    function initMarginEfficiencyChart() {
+      const ctx = document.getElementById('marginEfficiencyChart').getContext('2d');
+
+      const bubbleData = rawData.categories.map(c => ({
+        x: c.sales, // Venta en Millones COP
+        y: c.margin, // Margen %
+        r: Math.max(Math.sqrt(c.units) / 6.2, 7), // Tamaño según unidades
+        name: c.name,
+        color: c.color,
+        units: c.units
+      }));
+
+      marginScatterInstance = new Chart(ctx, {
+        type: 'bubble',
+        data: {
+          datasets: [{
+            label: 'Categorías',
+            data: bubbleData,
+            backgroundColor: bubbleData.map(d => d.color + 'B3'), // 70% opacity
+            borderColor: bubbleData.map(d => d.color),
+            borderWidth: 1.5,
+            hoverBorderWidth: 2.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleColor: '#FFFFFF',
+              bodyColor: '#CBD5E1',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10,
+              callbacks: {
+                title: function(items) {
+                  return items[0].raw.name;
+                },
+                label: function(context) {
+                  const d = context.raw;
+                  return [
+                    ` Facturación: $${d.x.toLocaleString('es-CO')}M COP`,
+                    ` Margen Bruto: ${d.y}%`,
+                    ` Unidades Vendidas: ${d.units.toLocaleString('es-CO')}`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Ventas Totales ($ Millones COP)',
+                color: '#94A3B8',
+                font: { size: 11 }
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94A3B8', callback: (v) => '$' + (v/1000).toFixed(0) + 'kM' }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Margen Bruto (%)',
+                color: '#94A3B8',
+                font: { size: 11 }
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94A3B8', callback: (v) => v + '%' }
+            }
+          }
+        }
+      });
+    }
+
+    // 4. PAYMENT METHODS (HORIZONTAL BAR CHART)
+    function initPaymentMethodsChart() {
+      const ctx = document.getElementById('paymentMethodsChart').getContext('2d');
+      const labels = rawData.payments.map(p => p.method);
+      const amounts = rawData.payments.map(p => p.amount);
+
+      paymentChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: amounts,
+            backgroundColor: rawData.payments.map(p => p.color),
+            borderRadius: 6,
+            barThickness: 18
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              callbacks: {
+                label: (ctx) => ` Facturación: $${ctx.parsed.x}B COP (${rawData.payments[ctx.dataIndex].pct}%)`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94A3B8', callback: (v) => '$' + v + 'B' }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#E2E8F0', font: { weight: 500 } }
+            }
+          }
+        }
+      });
+    }
+
+    // RENDER DETAILED CATEGORIES TABLE
+    function renderCategoryTable(categoriesList) {
+      const tbody = document.getElementById('catTableBody');
+      tbody.innerHTML = '';
+
+      categoriesList.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/40 transition-colors";
+        tr.innerHTML = `
+          <td class="py-3 px-3 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${item.color}"></span>
+            <span class="font-medium text-white">${item.name}</span>
+          </td>
+          <td class="py-3 px-3 text-right font-mono font-medium">$${item.sales.toLocaleString('es-CO')}M</td>
+          <td class="py-3 px-3 text-right font-mono text-slate-400">${item.share}%</td>
+          <td class="py-3 px-3 text-right font-mono font-bold ${item.margin >= 20 ? 'text-emerald-400' : 'text-slate-300'}">${item.margin}%</td>
+          <td class="py-3 px-3 text-right font-mono text-slate-300">${item.units.toLocaleString('es-CO')}</td>
+          <td class="py-3 px-3 text-center">
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${item.margin > 20 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-300 border border-slate-700'}">
+              ${item.tag}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // FILTER CATEGORY TABLE WITH SEARCH
+    function filterCategoriesTable() {
+      const term = document.getElementById('catSearchInput').value.toLowerCase();
+      const filtered = rawData.categories.filter(c => c.name.toLowerCase().includes(term));
+      renderCategoryTable(filtered);
+    }
+
+    // RENDER TOP 5 PRODUCTS
+    function renderTopProducts() {
+      const container = document.getElementById('topProductsContainer');
+      container.innerHTML = '';
+
+      rawData.topProducts.forEach((prod, idx) => {
+        const item = document.createElement('div');
+        item.className = "flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-slate-800/90 hover:border-slate-700 transition";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-brand-orange">
+              0${idx + 1}
+            </span>
+            <div>
+              <p class="text-xs font-semibold text-white tracking-tight">${prod.name}</p>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[10px] text-slate-400">${prod.category}</span>
+                <span class="text-slate-600">•</span>
+                <span class="text-[10px] text-slate-400">${prod.units} unidades</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-bold text-emerald-400 font-mono">$${prod.sales.toLocaleString('es-CO')}M</span>
+            <div class="text-[10px] text-slate-500 font-mono">COP</div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // RENDER REGIONAL CITIES
+    function renderCities() {
+      const grid = document.getElementById('citiesGrid');
+      grid.innerHTML = '';
+
+      rawData.cities.forEach(city => {
+        const el = document.createElement('div');
+        el.className = "p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col items-center justify-center transition-all hover:bg-slate-800/50";
+        el.innerHTML = `
+          <span class="text-xs font-medium text-slate-300">${city.name}</span>
+          <span class="text-sm font-bold text-white mt-1 font-mono">$${city.amount}</span>
+          <span class="text-[10px] text-brand-orange font-semibold mt-0.5">${city.share}</span>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
+    // INTERACTIVE VIEW FILTERING (COMPANY SELECTOR)
+    function updateDashboardView() {
+      const filter = document.getElementById('companyFilter').value;
+      const data = rawData.companies[filter];
+
+      // Update KPI Texts
+      document.getElementById('kpiRevenue').innerHTML = `${formatCurrencyBillions(data.revenue)} <span class="text-sm font-normal text-slate-400">COP</span>`;
+      document.getElementById('kpiProfit').innerHTML = `${formatCurrencyBillions(data.profit)} <span class="text-sm font-normal text-slate-400">COP</span>`;
+      document.getElementById('kpiMargin').innerText = data.margin.toFixed(2) + '%';
+      document.getElementById('kpiUnits').innerText = formatNumber(data.units);
+      document.getElementById('kpiTransactions').innerText = formatNumber(data.transactions);
+
+      const avgTicket = (data.revenue / data.transactions);
+      document.getElementById('kpiAvgTicket').innerHTML = `$${(avgTicket / 1000000).toFixed(2)}M <span class="text-sm font-normal text-slate-400">COP</span>`;
+
+      // Update Trend Chart dynamically
+      initMonthlyTrendChart(filter);
+
+      // Notification
+      showToast(`Filtro aplicado: ${data.name}`);
+    }
+
+    // TOAST NOTIFIER
+    function showToast(text) {
+      const toast = document.getElementById('toastMessage');
+      const toastText = document.getElementById('toastText');
+      toastText.innerText = text;
+      toast.classList.remove('opacity-0', 'translate-y-20');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-20');
+      }, 2600);
+    }
+
+    function triggerPrintNotification() {
+      showToast('Preparando informe consolidado en alta resolución...');
+      setTimeout(() => {
+        window.print();
+      }, 600);
+    }
+  </script>
+</body>
+</html>
